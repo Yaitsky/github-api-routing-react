@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #eee;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-weight: 200;
+  color: #3b414c;
+  font-size: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.app {
+  white-space: nowrap;
+  min-height: 100vh;
+  display: flex;
+  align-content: stretch;
+}
+
+.list {
+  position: relative;
+  white-space: normal;
+  min-height: 100%;
+  width: 33%;
+  padding: 0 20px;
+  overflow: auto;
+}
+
+.list:not(:last-child):after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 99%;
+  border-right: 1px solid #ccc;
+}
+
+.list__title {
+  font-weight: bold;
+}
+
+.card {
+  font-size:14px;
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+  padding: 10px 10px 10px 15px;
+  margin: 0 0 10px 0;
+  overflow: auto;
+  border: 1px solid #e5e5df;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.card__details {
+  margin-top: 20px;
+}
+
+.card__title {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.card__title:before {
+  display: inline-block;
+  width: 1em;
+  content: '▸';
+}
+
+.card__title--open:before {
+  content: '▾';
+}
+
+.checklist {
+  margin-top: 20px;
+}
+
+.checklist--add-task {
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 6px 10px;
+  margin-top: 15px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.checklist--add-task:focus {
+  outline:none;
+  border: 1px solid #999;
+}
+
+.checklist__text {
+  margin-left: 10px;
+}
+
+.checklist__task:first-child {
+  padding-top: 10px;
+  border-top: dashed 1px #ddd;
+}
+
+.checklist__task--remove:after {
+  margin-left: 5px;
+  display: inline-block;
+  color: #d66;
+  font-size: 10px;
+  content: "❌";
+}
