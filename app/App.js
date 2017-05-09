@@ -2,125 +2,43 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {render} from 'react-dom';
 
-class ContactAppContainer extends Component {
-  constructor() {
-    super();
-    this.state = {
-      contacts: []
-    }
-  }
+import { browserHistory, IndexRoute, Router, Route, Link } from 'react-router';
 
-  componentDidMount() {
-    fetch('./contacts.json')
-      .then((response) => response.json())
-      .then((responseData) => this.setState({contacts: responseData}))
-      .catch((error) => {
-        console.log('Error fetching contact-list', error);
-      });
-  }
+import About from './About';
+import Home from './Home';
+import Repos from './Repos';
+import ServerError from './ServerError';
 
+import RepoDetails from './RepoDetails';
+
+class App extends Component {
   render() {
-    return (<ContactApp contacts={this.state.contacts}/>);
-  }
-}
-
-class ContactApp extends Component {
-  constructor() {
-    super();
-    this.state = {
-      filterText: ''
-    }
-  }
-
-  handleUserInput(searchItem) {
-    this.setState({filterText: searchItem});
-  }
-
-  render() {
-    return (
+    return(
       <div>
-        <SearchBar
-          filterText={this.state.filterText}
-          onUserInput={this
-          .handleUserInput
-          .bind(this)}/>
-        <ContactList
-          contactList={this.props.contacts}
-          filterText={this.state.filterText}/>
+        <header>App</header>
+        <menu>
+          <ul>
+            <li><Link activeClassName="active" to="/home">Home</Link></li>  
+            <li><Link activeClassName="active" to="/about">About</Link></li>   
+            <li><Link activeClassName="active" to="/repos">Repos</Link></li>                              
+          </ul>
+        </menu>
+        {this.props.children}
       </div>
-    );
+    )
   }
 }
 
-ContactApp.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object)
-}
-
-class SearchBar extends Component {
-  handleChange(event) {
-    this
-      .props
-      .onUserInput(event.target.value);
-  }
-  render() {
-    return (<input
-      type="search"
-      placeholder="search"
-      value={this.props.filterText}
-      onChange={this
-      .handleChange
-      .bind(this)}/>);
-  }
-}
-
-SearchBar.propTypes = {
-  filterText: PropTypes.string
-}
-
-function isMatching(full, chunk) {
-  var string = full.toLowerCase(),
-    substring = chunk.toLowerCase();
-
-  if (string.indexOf(substring) + 1) {
-    return true;
-  }
-
-  return false;
-}
-
-class ContactList extends Component {
-  render() {
-    let filteredContacts = this
-      .props
-      .contactList
-      .filter((contact) => isMatching(contact.name, this.props.filterText));
-    return (
-      <ul>
-        {filteredContacts.map((contact) => <ContactItem key={contact.email} name={contact.name} email={contact.email}/>)}
-      </ul>
-    );
-  }
-}
-
-ContactList.propTypes = {
-  contactList: PropTypes.arrayOf(PropTypes.object)
-}
-
-class ContactItem extends Component {
-  render() {
-    return (
-      <li key={this.props.id}>
-        {this.props.name}
-        - {this.props.email}
-      </li>
-    );
-  }
-}
-
-ContactItem.propTypes = {
-  name: PropTypes.string,
-  email: PropTypes.string
-}
-
-render(
-  <ContactAppContainer/>, document.getElementById('root'));
+render((
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Home}/>
+      <Route path="home" component={Home}/>    
+      <Route path="about" component={About} title="About Us"/>
+      <Route path="repos" component={Repos}>
+        <Route path="/repos/:repo_name" component={RepoDetails}/>
+      </Route>
+      <Route path="error" component={ServerError} />
+    </Route>
+  </Router>
+), document.getElementById('root'));
